@@ -9,7 +9,7 @@ abstract class CharacterDatasource {
     List<int> ids,
   );
 
-  Future<CharacterModel> filterCharacters({
+  Future<List<CharacterModel>> filterCharacters({
     String? name,
     String? species,
     String? status,

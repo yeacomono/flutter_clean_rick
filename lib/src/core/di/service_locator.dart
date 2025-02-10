@@ -1,8 +1,9 @@
 import 'package:clean_arch_rick_and_morty/src/feature/home/domain/repository/character_repository.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/domain/repository/episode_repository.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/domain/repository/location_repository.dart';
+import 'package:clean_arch_rick_and_morty/src/feature/home/domain/usecase/character/filter_character.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/domain/usecase/episode/get_episodes.dart';
-import 'package:clean_arch_rick_and_morty/src/feature/home/domain/usecase/get_characters.dart';
+import 'package:clean_arch_rick_and_morty/src/feature/home/domain/usecase/character/get_characters.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/domain/usecase/location/get_locations.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/infraestructure/datasource/local/character_local_datasource.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/infraestructure/datasource/remote/character_remote_datasource.dart';
@@ -48,10 +49,16 @@ void serviceLocator() {
   getIt.registerLazySingleton(() {
     return GetLocationsUC(getIt());
   });
+  getIt.registerLazySingleton(() {
+    return FilterCharacterUC(getIt());
+  });
 
   /// REGISTER BLOC
   getIt.registerFactory<CharacterBloc>(
-    () => CharacterBloc(getCharactersUC: getIt()),
+    () => CharacterBloc(
+      getCharactersUC: getIt(),
+      filterCharacterUC: getIt(),
+    ),
   );
 
   getIt.registerFactory<EpisodeBloc>(

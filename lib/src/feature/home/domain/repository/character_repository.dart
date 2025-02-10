@@ -11,7 +11,7 @@ abstract class CharacterRepository {
     List<int> ids,
   );
 
-  Future<Either<Failure, CharacterEntity>> filterCharacters({
+  Future<Either<Failure, List<CharacterEntity>>> filterCharacters({
     String? name,
     String? species,
     String? status,

@@ -15,13 +15,18 @@ class AllCharacters extends CharacterEvent {
 }
 
 class FindCharacter extends CharacterEvent {
-  final int id;
-  const FindCharacter(this.id);
+  final String name;
+  const FindCharacter(this.name);
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [name];
 }
 
 class FilterCharacter extends CharacterEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FetchMoreCharacters extends CharacterEvent {
   @override
   List<Object> get props => [];
 }

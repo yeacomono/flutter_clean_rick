@@ -1,7 +1,9 @@
+import 'package:clean_arch_rick_and_morty/src/feature/home/presentation/bloc/character/character_bloc.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/presentation/view/character_list_view.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/presentation/view/episode_list_view.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/presentation/view/location_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = "HomeScreen";
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 60,
+          toolbarHeight: 100,
           title: const Text('Rick and Morty App'),
           //// THIS IS FOR THEME APP
           // actions: [
@@ -30,15 +32,45 @@ class HomeScreen extends StatelessWidget {
           // ],
           centerTitle: false,
           titleSpacing: 20,
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Characters'),
-              Tab(text: 'Location'),
-              Tab(text: 'Episode'),
-            ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(
+              80,
+            ), // Espacio para el `TabBar` y el `TextField`
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      context.read<CharacterBloc>().add(
+                            FindCharacter(value),
+                          );
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Search characters...",
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                ),
+                const TabBar(
+                  tabs: [
+                    Tab(text: 'Characters'),
+                    Tab(text: 'Location'),
+                    Tab(text: 'Episode'),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             CharacterListView(),
             LocationListView(),
@@ -47,9 +79,7 @@ class HomeScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.favorite),
-          onPressed: () {
-            // getIt<CharacterBloc>().add()
-          },
+          onPressed: () {},
         ),
       ),
     );

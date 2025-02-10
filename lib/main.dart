@@ -12,8 +12,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
+
   /// Character open box
   await Hive.openBox('character_cache');
+  await Hive.openBox('characters_search');
+
   serviceLocator();
   runApp(const MyApp());
 }

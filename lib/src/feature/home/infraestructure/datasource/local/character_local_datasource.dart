@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:clean_arch_rick_and_morty/src/core/error/exceptions.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/infraestructure/datasource/character_datasource.dart';
 import 'package:clean_arch_rick_and_morty/src/feature/home/infraestructure/models/character_model.dart';
@@ -9,14 +7,25 @@ class CharaterLocalDatasource implements CharacterDatasource {
   final Box _box = Hive.box('character_cache');
 
   @override
-  Future<CharacterModel> filterCharacters({
+  Future<List<CharacterModel>> filterCharacters({
     String? name,
     String? species,
     String? status,
     String? origin,
     String? location,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    try {
+      final data = _box.get('characters_search');
+      if (data != null) {
+        final list = List.from(data as List)
+            .map((v) => Map<String, dynamic>.from(v as Map))
+            .toList();
+        return list.map((e) => CharacterModel.fromJson(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      throw CacheException();
+    }
   }
 
   @override
@@ -25,8 +34,6 @@ class CharaterLocalDatasource implements CharacterDatasource {
   ) async {
     try {
       final data = _box.get('characters_page_$page');
-      log("CHAP $data");
-
       if (data != null) {
         final list = List.from(data as List)
             .map((v) => Map<String, dynamic>.from(v as Map))
@@ -46,6 +53,17 @@ class CharaterLocalDatasource implements CharacterDatasource {
     try {
       final jsonList = characters.map((c) => c.toJson()).toList();
       await _box.put('characters_page_$page', jsonList);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  Future<void> saveSearchCacheCharacters(
+    List<CharacterModel> characters,
+  ) async {
+    try {
+      final jsonList = characters.map((c) => c.toJson()).toList();
+      await _box.put('characters_search', jsonList);
     } catch (e) {
       throw CacheException();
     }

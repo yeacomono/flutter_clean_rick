@@ -20,3 +20,15 @@ Rick & Morty Flutter follows the principles of Clean Architecture.
 ```
 flutter run
 ```
+
+
+
+Mejoras:
+
+_ implementar mappers siempre y cuando separemos responsabilidades
+- mappers de responses
+- logger no funciona en ios mac , el paquete tuvo que ser sacado
+y relizarlo de forma manual.
+- Implementar manejo de errores mas complejos e integrar pantallas 
+de error builders.
+
